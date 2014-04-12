@@ -1,0 +1,12 @@
+{
+    "name": "self-service-portal",
+    "version": "0.0.1",
+    "dependencies": {
+        "requirejs": "*",
+        "requirejs-text": "*",
+        "angular": "*",
+        "angular-route": "*",
+        "ng-file-upload": "*",
+        "swagger-ui": "*"
+    }
+}

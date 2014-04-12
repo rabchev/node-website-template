@@ -1,0 +1,67 @@
+{
+    "name": "website-template",
+    "description": "Bare-bones NodeJS MVC website with Express, Swagger, Angular, RequireJS, Handlebars, Mocha.",
+    "version": "0.0.1",
+    "main": "index",
+    "author": "Boyan Rabchev <boyan@rabchev.com>",
+    "contributors": [
+        { "name": "Boyan Rabchev", "email": "boyan@rabchev.com" }
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/rabchev/node-website-template.git"
+    },
+    "dependencies": {
+        "express": "^3.5.1",
+        "body-parser": "*",
+        "cookie-parser": "*",
+        "method-override": "*",
+        "serve-static": "*",
+        "static-favicon": "*",
+        "swagger-node-express": "*",
+        "async": "*",
+        "lodash": "*",
+        "express3-handlebars": "*",
+        "winston": "*"
+    },
+    "devDependencies": {
+        "mocha": "*",
+        "chai": "*",
+        "sinon-chai": "*",
+        "supertest": "*",
+        "grunt": "*",
+        "grunt-release": "*",
+        "grunt-shell": "*",
+        "grunt-simple-mocha": "*",
+        "grunt-node-inspector": "*",
+        "grunt-concurrent": "*"
+    },
+    "scripts": {
+        "postinstall": "bower install",
+        "postupdate": "bower update",
+        "start": "node index",
+        "test": "grunt test"
+    },
+    "keywords": [
+        "website",
+        "template",
+        "mvc",
+        "node",
+        "angular",
+        "requirejs",
+        "handlebars",
+        "mocha",
+        "swagger"
+    ],
+    "bugs": {
+        "email": "boyan@rabchev.com",
+        "url": "https://github.com/rabchev/node-website-template/issues"
+    },
+    "license": {
+        "type": "MIT",
+        "url": "http://github.com/rabchev/node-website-template/blob/master/LICENSE"
+    },
+    "engines": {
+        "node": "0.10.x"
+    }
+}
