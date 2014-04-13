@@ -22,7 +22,8 @@
         "async": "*",
         "lodash": "*",
         "express3-handlebars": "*",
-        "winston": "*"
+        "winston": "*",
+        "nconf": "*"
     },
     "devDependencies": {
         "mocha": "*",

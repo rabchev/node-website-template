@@ -1,6 +1,8 @@
 "use strict";
 
-var express         = require("express"),
+var http            = require("http"),
+    https           = require("https"),
+    express         = require("express"),
     bodyParser      = require("body-parser"),
     cookieParser    = require("cookie-parser"),
     methodOverride  = require("method-override"),
@@ -16,11 +18,9 @@ var express         = require("express"),
     rest_api        = require("./rest-api"),
     ignorePaths     = new RegExp("^/public/|/content/|/client/", "i"),
     resourcesRoot   = "/res/" + pckg.version,
+    servers         = [],
     session,
-    srv,
     hbs;
-
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 function dummyCb(err) {
     if (err) {
@@ -49,6 +49,21 @@ hbs = exphbs.create({
     }
 });
 
+function addServer(opts, app, callback) {
+    var srv;
+    if (opts.protocol === "https") {
+        srv = https.createServer(opts.ssl, app);
+    } else {
+        srv = http.createServer(app);
+    }
+    srv.listen(opts.url.port, function () {
+        console.log("listening on ", url.format(opts.url));
+        callback(null, srv, opts.url);
+    });
+    srv._inst_opts = opts;
+    servers.push(srv);
+}
+
 function init(opts, callback) {
     if (typeof opts === "function") {
         callback = opts;
@@ -59,30 +74,18 @@ function init(opts, callback) {
         callback = dummyCb;
     }
 
+    if (servers.length) {
+        return callback(new Error("Server is already running."));
+    }
+
     if (!opts) {
-        opts = {};
+        opts = require("./config");
     } else if (typeof opts === "number") {
-        opts = { url: { port: opts } };
-    }
-
-    if (!opts.url) {
-        opts.url = {};
-    }
-
-    if (!opts.url.port) {
-        opts.url.port = process.env.VCAP_APP_PORT || 8095;
-    }
-
-    if (!opts.url.hostname) {
-        opts.url.hostname = process.env.VCAP_APP_HOST || "localhost";
-    }
-
-    if (!opts.url.protocol) {
-        opts.url.protocol = process.env.VCAP_APP_PROTOCOL || "http";
+        opts = { app: { port: opts, hostname: "localhsot", protocol: "http" } };
     }
 
     var app = express();
-        app.set("rootUrl", url.format(opts.url));
+        app.set("rootUrl", url.format(opts.app));
         app.set("views", path.resolve("server", "views"));
         app.engine("html", hbs.engine);
         app.set("view engine", "html");
@@ -90,7 +93,8 @@ function init(opts, callback) {
         app.use(favicon())
             .use(bodyParser())
             .use(methodOverride())
-            .use(cookieParser("7AFFF1E44C4D3"))
+// FIXME: Change the key below with randomly generated number. You could use (http://randomkeygen.com).
+            .use(cookieParser("95DA438DE3A81"))
             .use(resourcesRoot, serveStatic(path.resolve("client")));
 
     async.series(
@@ -114,10 +118,6 @@ function init(opts, callback) {
 }
 
 function start(opts, callback) {
-    if (srv) {
-        return callback(srv, opts.url);
-    }
-
     if (typeof port === "function") {
         callback = opts;
         opts = null;
@@ -127,23 +127,13 @@ function start(opts, callback) {
         callback = dummyCb;
     }
 
-    if (!opts) {
-        opts = {};
-    } else if (typeof opts === "number") {
-        opts = { url: { port: opts } };
-    }
-
     init(opts, function (err, app) {
         if (err) {
             return callback(err);
         }
 
         try {
-            srv = app.listen(opts.url.port, function () {
-                console.log("Listening on ", url.format(opts.url));
-                exports.app = app;
-                callback(null, srv, opts.url);
-            });
+
         } catch (err) {
             callback(err);
         }
@@ -151,11 +141,15 @@ function start(opts, callback) {
 }
 
 function stop(callback) {
-    if (srv) {
-        console.log("Stopping on ", exports.app.get("rootUrl"));
-        exports.app = null;
-        srv.close(callback);
-        srv = null;
+    if (servers.length) {
+        async.each(servers, function (srv, done) {
+            console.log("stopping on ", url.format(srv._inst_opts.url));
+            exports.app = null;
+            srv.close(done);
+            srv = null;
+        }, function (err) {
+            callback(err);
+        });
     } else if (callback) {
         callback();
     }
