@@ -28,7 +28,7 @@ exports.init = function (app, callback) {
             done();
         }, function (err) {
             var uiPath = path.join(__dirname, "..", "client", "bower_components", "swagger-ui", "dist");
-            swagger.configure(app.get("rootUrl") + "/api", "0.1");
+            swagger.configure(app.get("swaggerUrl") + "/api", "0.1");
             api.use("/docs", express.static(uiPath));
             callback(err);
         });

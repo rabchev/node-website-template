@@ -11,6 +11,7 @@ var http            = require("http"),
     exphbs          = require("express3-handlebars"),
     path            = require("path"),
     url             = require("url"),
+    fs              = require("fs"),
     async           = require("async"),
     auth            = require("./auth"),
     pckg            = require("../package.json"),
@@ -50,15 +51,22 @@ hbs = exphbs.create({
 });
 
 function addServer(opts, app, callback) {
-    var srv;
+    var srv, cred;
     if (opts.protocol === "https") {
-        srv = https.createServer(opts.ssl, app);
+        cred = {};
+        if (opts.pfx) {
+            cred.pfx = fs.readFileSync(opts.pfx);
+        } else {
+            cred.key = fs.readFileSync(opts.key);
+            cred.cert = fs.readFileSync(opts.cert);
+        }
+        srv = https.createServer(cred, app);
     } else {
         srv = http.createServer(app);
     }
-    srv.listen(opts.url.port, function () {
-        console.log("listening on ", url.format(opts.url));
-        callback(null, srv, opts.url);
+    srv.listen(opts.port, function () {
+        console.log("listening on ", url.format(opts));
+        callback(null, srv);
     });
     srv._inst_opts = opts;
     servers.push(srv);
@@ -81,11 +89,11 @@ function init(opts, callback) {
     if (!opts) {
         opts = require("./config");
     } else if (typeof opts === "number") {
-        opts = { app: { port: opts, hostname: "localhsot", protocol: "http" } };
+        opts = { instances: [{ port: opts, hostname: "localhsot", protocol: "http" }] };
     }
 
     var app = express();
-        app.set("rootUrl", url.format(opts.app));
+        app.set("swaggerUrl", url.format(opts.instances[opts.swaggerInst || 0]));
         app.set("views", path.resolve("server", "views"));
         app.engine("html", hbs.engine);
         app.set("view engine", "html");
@@ -112,7 +120,7 @@ function init(opts, callback) {
             if (err) {
                 return callback(err);
             }
-            callback(null, app);
+            callback(null, app, opts);
         }
     );
 }
@@ -127,28 +135,33 @@ function start(opts, callback) {
         callback = dummyCb;
     }
 
-    init(opts, function (err, app) {
+    init(opts, function (err, app, opts) {
         if (err) {
             return callback(err);
         }
 
-        try {
-
-        } catch (err) {
-            callback(err);
-        }
+        async.each(opts.instances, function (inst, done) {
+            addServer(inst, app, done);
+        }, function () {
+            exports.app = app;
+            exports.servers = servers;
+            callback();
+        });
     });
 }
 
 function stop(callback) {
     if (servers.length) {
         async.each(servers, function (srv, done) {
-            console.log("stopping on ", url.format(srv._inst_opts.url));
-            exports.app = null;
+            console.log("stopping on ", url.format(srv._inst_opts));
             srv.close(done);
-            srv = null;
         }, function (err) {
-            callback(err);
+            exports.app = null;
+            exports.servers = null;
+            servers.length = 0;
+            if (callback) {
+                callback(err);
+            }
         });
     } else if (callback) {
         callback();
