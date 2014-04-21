@@ -38,6 +38,7 @@ function sessionHandler(req, res, next) {
 
 hbs = exphbs.create({
     layoutsDir: path.resolve("server", "views", "layouts"),
+    partialsDir: path.resolve("server", "views", "partials"),
     defaultLayout: "main",
     extname: ".html",
     helpers: {
@@ -93,12 +94,11 @@ function init(opts, callback) {
     }
 
     var app = express();
-        app.set("swaggerUrl", url.format(opts.instances[opts.swaggerInst || 0]));
-        app.set("views", path.resolve("server", "views"));
-        app.engine("html", hbs.engine);
-        app.set("view engine", "html");
-
-        app.use(favicon())
+        app.set("swaggerUrl", url.format(opts.instances[opts.swaggerInst || 0]))
+            .set("views", path.resolve("server", "views"))
+            .engine("html", hbs.engine)
+            .set("view engine", "html")
+            .use(favicon())
             .use(bodyParser())
             .use(methodOverride())
 // FIXME: Change the key below with randomly generated number. You could use (http://randomkeygen.com).

@@ -12,7 +12,7 @@
         "url": "https://github.com/rabchev/node-website-template.git"
     },
     "dependencies": {
-        "express": "^3.5.1",
+        "express": "*",
         "body-parser": "*",
         "cookie-parser": "*",
         "method-override": "*",
@@ -23,7 +23,11 @@
         "lodash": "*",
         "express3-handlebars": "*",
         "winston": "*",
-        "nconf": "*"
+        "nconf": "*",
+        "passport": "*",
+        "passport-local": "*",
+        "passport-facebook": "*",
+        "connect-flash": "*"
     },
     "devDependencies": {
         "mocha": "*",

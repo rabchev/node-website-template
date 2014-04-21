@@ -4,12 +4,12 @@ define(["angular", "app"], function(angular, app) {
     return app.config(["$routeProvider", function($routeProvider) {
         $routeProvider.
             when("/", {
-                templateUrl: appConfig.resources + "/views/home.html",
-                controller: "home"
+                templateUrl: appConfig.resources + "/views/dashboard.html",
+                controller: "dashboard"
             }).
-            when("/page1", {
-                templateUrl: appConfig.resources + "/views/page1.html",
-                controller: "page1"
+            when("/page2", {
+                templateUrl: appConfig.resources + "/views/page2.html",
+                controller: "page2"
             }).
             otherwise({
                 redirectTo: "/"

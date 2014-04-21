@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html>
+<html ng-app>
+
 <head>
     <title>{{ title }}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -10,9 +11,19 @@
         };
     </script>
 </head>
+
 <body>
-    {{>navigation}}
+    <script data-main="{{resources}}/main" src="{{resources}}/bower_components/requirejs/require.js"></script>
     <h2>{{title}}</h2>
-    {{{ body }}}
+    <ul class="menu">
+        <li>
+            <a href="#/">Dashboard</a>
+        </li>
+        <li>
+            <a href="#/page2">Page 2</a>
+        </li>
+    </ul>
+    <div ng-view></div>
 </body>
+
 </html>
