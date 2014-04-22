@@ -8,7 +8,7 @@ var http            = require("http"),
     methodOverride  = require("method-override"),
     serveStatic     = require("serve-static"),
     favicon         = require("static-favicon"),
-    flash           = require("connect-flash"),
+    flash           = require("connect-flash")(),
     exphbs          = require("express3-handlebars"),
     path            = require("path"),
     url             = require("url"),
@@ -36,6 +36,13 @@ function sessionHandler(req, res, next) {
         return next();
     }
     session(req, res, next);
+}
+
+function flashHandler(req, res, next) {
+    if (!req.session) {
+        return next();
+    }
+    flash(req, res, next);
 }
 
 hbs = exphbs.create({
@@ -117,6 +124,7 @@ function init(opts, callback) {
                     .use(methodOverride())
                     .use(cookieParser(secretKey))
                     .use(sessionHandler)
+                    .use(flashHandler)
                     .use(resourcesRoot, serveStatic(path.resolve("client")));
 
                 done();
