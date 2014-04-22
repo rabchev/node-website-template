@@ -8,6 +8,7 @@ var http            = require("http"),
     methodOverride  = require("method-override"),
     serveStatic     = require("serve-static"),
     favicon         = require("static-favicon"),
+    flash           = require("connect-flash"),
     exphbs          = require("express3-handlebars"),
     path            = require("path"),
     url             = require("url"),
@@ -20,6 +21,7 @@ var http            = require("http"),
     ignorePaths     = new RegExp("^/public/|/content/|/client/", "i"),
     resourcesRoot   = "/res/" + pckg.version,
     servers         = [],
+    secretKey,
     session,
     hbs;
 
@@ -94,19 +96,31 @@ function init(opts, callback) {
     }
 
     var app = express();
-        app.set("swaggerUrl", url.format(opts.instances[opts.swaggerInst || 0]))
-            .set("views", path.resolve("server", "views"))
-            .engine("html", hbs.engine)
-            .set("view engine", "html")
-            .use(favicon())
-            .use(bodyParser())
-            .use(methodOverride())
-// FIXME: Change the key below with randomly generated number. You could use (http://randomkeygen.com).
-            .use(cookieParser("95DA438DE3A81"))
-            .use(resourcesRoot, serveStatic(path.resolve("client")));
-
     async.series(
         [
+            function (done) {
+// Configure server instance varialbes.
+
+// FIXME: Change the key below with randomly generated number. You could use (http://randomkeygen.com).
+                secretKey = "95DA438DE3A81";
+                session = require("express-session")({ secret: secretKey });
+
+                done();
+            },
+            function (done) {
+                app.set("swaggerUrl", url.format(opts.instances[opts.swaggerInst || 0]))
+                    .set("views", path.resolve("server", "views"))
+                    .engine("html", hbs.engine)
+                    .set("view engine", "html")
+                    .use(favicon())
+                    .use(bodyParser())
+                    .use(methodOverride())
+                    .use(cookieParser(secretKey))
+                    .use(sessionHandler)
+                    .use(resourcesRoot, serveStatic(path.resolve("client")));
+
+                done();
+            },
             function (done) {
                 auth.init(app, done);
             },

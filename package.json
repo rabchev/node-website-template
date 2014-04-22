@@ -27,6 +27,7 @@
         "passport": "*",
         "passport-local": "*",
         "passport-facebook": "*",
+        "express-session": "",
         "connect-flash": "*"
     },
     "devDependencies": {

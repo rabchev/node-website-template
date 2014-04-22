@@ -1,5 +1,4 @@
-var flash               = require("connect-flash"),
-    passport            = require("passport"),
+var passport            = require("passport"),
     LocalStrategy       = require("passport-local").Strategy,
     FacebookStrategy    = require("passport-facebook").Strategy;
 
@@ -84,7 +83,6 @@ passport.use(new LocalStrategy(
 
 exports.init = function (app, callback) {
     app
-        .use(flash())
         .use(passport.initialize())
         .use(passport.session());
 
