@@ -11,7 +11,9 @@
     </script>
 </head>
 <body>
-    {{>navigation}}
+    <div class="navbar clearfix" >
+        <div class="userstat">{{>user-status}}</div>{{>navigation}}
+    </div>
     <h2>{{title}}</h2>
     {{{ body }}}
 </body>
