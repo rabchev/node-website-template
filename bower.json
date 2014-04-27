@@ -6,7 +6,7 @@
         "requirejs-text": "*",
         "angular": "*",
         "angular-route": "*",
-        "ng-file-upload": "*",
-        "swagger-ui": "*"
+        "swagger-ui": "*",
+        "bootstrap": "*"
     }
 }

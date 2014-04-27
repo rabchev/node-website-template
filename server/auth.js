@@ -5,15 +5,23 @@ var passport            = require("passport"),
 var users = [
     {
         id: 1,
+        name: "Bob Pott",
         username: "bob",
         password: "secret",
-        email: "bob@example.com"
+        email: "bob@example.com",
+        roles: [
+            "administrators"
+        ]
     },
     {
         id: 2,
+        name: "Joe Haxby",
         username: "joe",
         password: "birthday",
-        email: "joe@example.com"
+        email: "joe@example.com",
+        roles: [
+            "contributers"
+        ]
     }
 ];
 

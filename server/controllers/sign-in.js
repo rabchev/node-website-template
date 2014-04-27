@@ -2,32 +2,32 @@
 
 var passport = require("passport");
 
-exports.getLogin = function (req, res) {
+exports.getSignIn = function (req, res) {
     var scope = {
         title:  "NodeJS MVC Website Template",
         user: req.user,
         message: req.flash("error")
     };
-    res.render("login", scope);
+    res.render("sign-in", scope);
 };
 
-exports.postLogin = function (req, res) {
+exports.postSignIn = function (req, res) {
     res.redirect("/");
 };
 
-exports.getLogout = function (req, res){
+exports.getSignOut = function (req, res){
     req.logout();
     res.redirect("/");
 };
 
 exports.init = function (app) {
     var authOpts = {
-            failureRedirect: "/login",
+            failureRedirect: "/sign-in",
             failureFlash: true
         },
         authFn = passport.authenticate("local", authOpts);
 
-    app.get("/login", exports.getLogin);
-    app.get("/logout", exports.getLogout);
-    app.post("/login", authFn, exports.postLogin);
+    app.get("/sign-in", exports.getSignIn);
+    app.get("/sign-out", exports.getSignOut);
+    app.post("/sign-in", authFn, exports.postSignIn);
 };
