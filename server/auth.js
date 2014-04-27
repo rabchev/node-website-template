@@ -1,6 +1,7 @@
 var passport            = require("passport"),
     LocalStrategy       = require("passport-local").Strategy,
-    FacebookStrategy    = require("passport-facebook").Strategy;
+    FacebookStrategy    = require("passport-facebook").Strategy,
+    ensureLogin         = require("connect-ensure-login");
 
 var users = [
     {
@@ -92,7 +93,8 @@ passport.use(new LocalStrategy(
 exports.init = function (app, callback) {
     app
         .use(passport.initialize())
-        .use(passport.session());
+        .use(passport.session())
+        .set("authHandler", ensureLogin.ensureAuthenticated("/sign-in"));
 
     callback();
 };

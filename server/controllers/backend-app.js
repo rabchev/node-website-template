@@ -10,5 +10,5 @@ function backend_app(req, res) {
 }
 
 exports.init = function (app) {
-    app.get("/admin", backend_app);
+    app.get("/admin", app.settings.authHandler, backend_app);
 };

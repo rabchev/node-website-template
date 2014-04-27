@@ -45,6 +45,16 @@ function flashHandler(req, res, next) {
     flash(req, res, next);
 }
 
+function addScope(req, res, next) {
+    if (req.session) {
+        req.scope = {
+            user: req.user,
+            isAuthenticated: req.isAuthenticated()
+        };
+    }
+    next();
+}
+
 hbs = exphbs.create({
     layoutsDir: path.resolve("server", "views", "layouts"),
     partialsDir: path.resolve("server", "views", "partials"),
@@ -131,6 +141,8 @@ function init(opts, callback) {
             },
             function (done) {
                 auth.init(app, done);
+                // Scope must be after authentication.
+                app.use(addScope);
             },
             function (done) {
                 rest_api.init(app, done);

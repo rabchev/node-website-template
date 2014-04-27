@@ -27,6 +27,7 @@
         "passport": "*",
         "passport-local": "*",
         "passport-facebook": "*",
+        "connect-ensure-login": "*",
         "express-session": "",
         "connect-flash": "*"
     },

@@ -11,10 +11,6 @@ exports.getSignIn = function (req, res) {
     res.render("sign-in", scope);
 };
 
-exports.postSignIn = function (req, res) {
-    res.redirect("/");
-};
-
 exports.getSignOut = function (req, res){
     req.logout();
     res.redirect("/");
@@ -22,12 +18,12 @@ exports.getSignOut = function (req, res){
 
 exports.init = function (app) {
     var authOpts = {
+            successReturnToOrRedirect: "/",
             failureRedirect: "/sign-in",
             failureFlash: true
-        },
-        authFn = passport.authenticate("local", authOpts);
+        };
 
     app.get("/sign-in", exports.getSignIn);
     app.get("/sign-out", exports.getSignOut);
-    app.post("/sign-in", authFn, exports.postSignIn);
+    app.post("/sign-in", passport.authenticate("local", authOpts));
 };

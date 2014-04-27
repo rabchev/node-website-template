@@ -1,13 +1,8 @@
 "use strict";
 
 function home(req, res) {
-    var scope = {
-        title:  "NodeJS MVC Website Template",
-        user: req.user,
-        isAuthenticated: req.isAuthenticated()
-    };
-
-    res.render("home", scope);
+    req.scope.title = "NodeJS MVC Website Template";
+    res.render("home", req.scope);
 }
 
 exports.init = function (app) {
