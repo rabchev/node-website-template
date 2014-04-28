@@ -137,6 +137,9 @@ function init(opts, callback) {
                     .use(flashHandler)
                     .use(resourcesRoot, serveStatic(path.resolve("client")));
 
+                app.locals.projectName = pckg.name;
+                app.locals.htmlTitle = pckg.name;
+
                 done();
             },
             function (done) {

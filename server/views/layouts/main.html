@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{{ title }}</title>
+    <title>{{htmlTitle}}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" type="text/css" media="all" href="{{resources}}/css/main.css" />
     <link rel="stylesheet" type="text/css" media="all" href="{{resources}}/bower_components/bootstrap/dist/css/bootstrap.min.css">
@@ -15,7 +15,7 @@
 </head>
 <body>
     {{>navigation}}
-    <h2>{{title}}</h2>
+    {{#if pageTitle}}<h2>{{pageTitle}}</h2>{{/if}}
     {{{ body }}}
 </body>
 </html>
