@@ -1,8 +1,9 @@
 "use strict";
 
 function home(req, res) {
-    req.scope.title = "NodeJS MVC Website Template";
-    res.render("home", req.scope);
+    res.render("home", {
+        pageTitle: "NodeJS MVC Website Template"
+    });
 }
 
 exports.init = function (app) {

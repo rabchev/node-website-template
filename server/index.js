@@ -23,7 +23,8 @@ var http            = require("http"),
     servers         = [],
     secretKey,
     session,
-    hbs;
+    hbs,
+    render;
 
 function dummyCb(err) {
     if (err) {
@@ -43,16 +44,6 @@ function flashHandler(req, res, next) {
         return next();
     }
     flash(req, res, next);
-}
-
-function addScope(req, res, next) {
-    if (req.session) {
-        req.scope = {
-            user: req.user,
-            isAuthenticated: req.isAuthenticated()
-        };
-    }
-    next();
 }
 
 hbs = exphbs.create({
@@ -144,8 +135,6 @@ function init(opts, callback) {
             },
             function (done) {
                 auth.init(app, done);
-                // Scope must be after authentication.
-                app.use(addScope);
             },
             function (done) {
                 rest_api.init(app, done);
@@ -204,6 +193,16 @@ function stop(callback) {
         callback();
     }
 }
+
+// Override render method to add authentication and user info to the view scope.
+render = express.response.render;
+express.response.render = function (view, options, fn) {
+    options = options || {};
+    options.isAuthenticated = this.req.isAuthenticated();
+    options.user = this.req.user;
+
+    render.call(this, view, options, fn);
+};
 
 exports.init = init;
 exports.start = start;

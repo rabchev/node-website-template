@@ -1,11 +1,11 @@
 "use strict";
 
 exports.getAccount = function (req, res) {
-    var scope = req.scope;
-    scope.title = "My Account";
-    scope.message = req.flash("error");
-
-    res.render("account", scope);
+    res.render("account", {
+        htmlTitle: "My Account",
+        pageTitle: "My Account",
+        message: req.flash("error")
+    });
 };
 
 exports.postAccount = function (req, res) {
