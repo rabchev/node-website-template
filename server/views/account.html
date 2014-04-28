@@ -1,13 +1,16 @@
 <script src="{{resources}}/bower_components/json-editor/jsoneditor.min.js"></script>
-
-<div id="editor_holder"></div>
-<button id="submit" class="btn btn-lg btn-primary btn-block">Submit</button>
-
+<div class="container">
+    <div id="editor_holder"></div>
+    <button id="submit" class="btn btn-lg btn-primary">Submit</button>
+</div>
 <script>
     // Initialize the editor with a JSON schema
     var editor = new JSONEditor(document.getElementById('editor_holder'), {
         theme: "bootstrap3",
         disable_edit_json: true,
+        disable_collapse: true,
+        no_additional_properties: true,
+        required_by_default: true,
         schema: {
             type: "object",
             title: "Car",
