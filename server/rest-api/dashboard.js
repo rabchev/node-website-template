@@ -4,6 +4,7 @@
 var dtos = {
     Sample: {
         id: "Sample",
+        title: "Sample",
         description: "This is a sample DTO.",
         required: ["name"],
         properties: {

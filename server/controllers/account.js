@@ -1,10 +1,28 @@
 "use strict";
 
+var _       = require("lodash"),
+    schema  = require("../models/user.json");
+
+schema.title = "My Account";
+delete schema.description;
+
 exports.getAccount = function (req, res) {
+    var isAdmin = req.user && req.user.roles && req.user.roles.indexOf("administrators") != -1;
+
+    function replacer(key, value)
+    {
+        if (key === "password" || (!isAdmin && key === "roles")) {
+            return undefined;
+        }
+
+        return value;
+    }
+
     res.render("account", {
         htmlTitle: "My Account",
-        pageTitle: "My Account",
-        message: req.flash("error")
+        message: req.flash("error"),
+        data: JSON.stringify(req.user, replacer),
+        schema: JSON.stringify(schema, replacer)
     });
 };
 
@@ -19,6 +37,6 @@ exports.init = function (app) {
         },
         authHandler = app.get("authHandler");
 
-    app.get("/account/:username", authHandler, exports.getAccount);
-    app.post("/account/:username", authHandler, exports.postAccount);
+    app.get("/account", authHandler, exports.getAccount);
+    app.post("/account", authHandler, exports.postAccount);
 };
