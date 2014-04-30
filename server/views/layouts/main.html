@@ -6,7 +6,6 @@
     <link rel="stylesheet" type="text/css" media="all" href="{{resources}}/css/main.css" />
     <link rel="stylesheet" type="text/css" media="all" href="{{resources}}/bower_components/bootstrap/dist/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="{{resources}}/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script>
         window.appConfig = {
             resources: "{{resources}}"
@@ -17,5 +16,7 @@
     {{>navigation}}
     {{#if pageTitle}}<div class="container"><h2>{{pageTitle}}</h2></div>{{/if}}
     {{{ body }}}
+    <script src="{{resources}}/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    {{{ scripts }}}
 </body>
 </html>

@@ -117,6 +117,7 @@ function init(opts, callback) {
             },
             function (done) {
                 app.set("swaggerUrl", url.format(opts.instances[opts.swaggerInst || 0]))
+                    .set("resources", resourcesRoot)
                     .set("views", path.resolve("server", "views"))
                     .engine("html", hbs.engine)
                     .set("view engine", "html")

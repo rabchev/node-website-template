@@ -5,7 +5,7 @@ var passport            = require("passport"),
 
 var users = [
     {
-        id: 1,
+        id: "1",
         name: "Bob Pott",
         username: "bob",
         password: "secret",
@@ -15,7 +15,7 @@ var users = [
         ]
     },
     {
-        id: 2,
+        id: "2",
         name: "Joe Haxby",
         username: "joe",
         password: "birthday",
