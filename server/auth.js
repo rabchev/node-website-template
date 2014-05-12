@@ -1,7 +1,7 @@
 var passport            = require("passport"),
     LocalStrategy       = require("passport-local").Strategy,
-    FacebookStrategy    = require("passport-facebook").Strategy,
-    ensureLogin         = require("connect-ensure-login");
+    ensureLogin         = require("connect-ensure-login"),
+    users               = require("./data/users");
 
 // Passport session setup.
 //   To support persistent login sessions, Passport needs to be able to
@@ -13,7 +13,7 @@ passport.serializeUser(function (user, done) {
 });
 
 passport.deserializeUser(function (id, done) {
-    findById(id, function (err, user) {
+    users.findById(id, function (err, user) {
         done(err, user);
     });
 });
@@ -24,7 +24,7 @@ passport.use(new LocalStrategy(
         // username, or the password is not correct, set the user to `false` to
         // indicate failure and set a flash message.  Otherwise, return the
         // authenticated `user`.
-        findByUsername(username, function (err, user) {
+        users.findByUsername(username, function (err, user) {
             if (err) {
                 return done(err);
             }

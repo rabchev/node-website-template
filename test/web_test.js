@@ -45,6 +45,7 @@ describe("public site", function () {
                 .expect(200);
         }, function (data) {
             expect(data).to.be.ok;
+
         });
     });
 });

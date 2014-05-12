@@ -64,7 +64,7 @@ function update(user, callback) {
     if (user) {
         dest = _.cloneDeep(_.merge(dest, user));
     } else {
-        err = new Error("User \"" + id + "\" does not exist.");
+        err = new Error("User \"" + user._id + "\" does not exist.");
     }
 
     returnBack(callback, err, dest);

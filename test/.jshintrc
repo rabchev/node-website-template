@@ -1,0 +1,12 @@
+{
+    "node": true,
+    "quotmark": "double",
+    "undef": true,
+    "unused": true,
+    "expr": true,
+    "predef": [
+        "describe",
+        "before",
+        "it"
+    ]
+}

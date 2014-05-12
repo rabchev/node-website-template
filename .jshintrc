@@ -1,9 +1,6 @@
 {
     "node": true,
     "quotmark": "double",
-    "globals": {
-        "describe": true,
-        "before": true,
-        "it": true
-    }
+    "undef": true,
+    "unused": true
 }
