@@ -1,7 +1,6 @@
 {
     "node": true,
     "quotmark": "double",
-    "expr": true,
     "globals": {
         "describe": true,
         "before": true,
