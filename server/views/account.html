@@ -47,7 +47,6 @@
                 disable_edit_json: true,
                 disable_collapse: true,
                 no_additional_properties: true,
-                required_by_default: true,
                 startval: data,
                 schema: schema
             }),
@@ -57,15 +56,14 @@
                 $("#edit_account").addClass("hide");
                 $("#change_password").addClass("hide");
                 editor.enable();
-                editor.getEditor("root.username").disable();
             },
             cancel  = function () {
                 $("#cancel_account").addClass("hide");
                 $("#update_account").addClass("hide");
                 $("#edit_account").removeClass("hide");
                 $("#change_password").removeClass("hide");
-                editor.disable();
                 editor.setValue(data);
+                editor.disable();
             },
             update  = function () {
                 data = editor.getValue();

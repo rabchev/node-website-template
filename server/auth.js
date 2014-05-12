@@ -3,57 +3,13 @@ var passport            = require("passport"),
     FacebookStrategy    = require("passport-facebook").Strategy,
     ensureLogin         = require("connect-ensure-login");
 
-var users = [
-    {
-        id: "1",
-        name: "Bob Pott",
-        username: "bob",
-        password: "secret",
-        email: "bob@example.com",
-        roles: [
-            "administrators"
-        ]
-    },
-    {
-        id: "2",
-        name: "Joe Haxby",
-        username: "joe",
-        password: "birthday",
-        email: "joe@example.com",
-        roles: [
-            "contributers"
-        ]
-    }
-];
-
-function findById(id, fn) {
-    var idx = id - 1;
-    if (users[idx]) {
-        fn(null, users[idx]);
-    } else {
-        fn(new Error("User " + id + " does not exist"));
-    }
-}
-
-// FIXME: Replace with database.
-function findByUsername(username, fn) {
-    for (var i = 0, len = users.length; i < len; i++) {
-        var user = users[i];
-        if (user.username === username) {
-            return fn(null, user);
-        }
-    }
-    return fn(null, null);
-}
-
-
 // Passport session setup.
 //   To support persistent login sessions, Passport needs to be able to
 //   serialize users into and deserialize users out of the session.  Typically,
 //   this will be as simple as storing the user ID when serializing, and finding
 //   the user by ID when deserializing.
 passport.serializeUser(function (user, done) {
-    done(null, user.id);
+    done(null, user._id);
 });
 
 passport.deserializeUser(function (id, done) {

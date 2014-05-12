@@ -12,10 +12,18 @@
             "title": "Full Name",
             "type": "string"
         },
+        "nickname": {
+            "title": "Nickname",
+            "type": "string"
+        },
         "email": {
             "title": "Email Address",
             "type": "string",
             "format": "email"
+        },
+        "phone": {
+            "title": "Phone Number",
+            "type": "string"
         },
         "password": {
             "title": "Password",
