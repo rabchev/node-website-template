@@ -1,8 +1,7 @@
-var nconf   = require("nconf"),
-    insts   = [],
-    sep     = ",",
+var nconf = require("nconf"),
+    insts = [],
+    sep = ",",
     app,
-    idx,
     i;
 
 nconf.argv({
@@ -44,14 +43,14 @@ nconf.argv({
 }).env({
     separator: "_",
     whitelist: [
-            "app_port",
-            "app_hostname",
-            "app_protocol",
-            "app_key",
-            "app_cert",
-            "app_pfx",
-            "app_swaggerInst"
-        ]
+        "app_port",
+        "app_hostname",
+        "app_protocol",
+        "app_key",
+        "app_cert",
+        "app_pfx",
+        "app_swaggerInst"
+    ]
 }).file({
     file: "../web-config.json"
 }).defaults({

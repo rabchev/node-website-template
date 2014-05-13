@@ -1,6 +1,7 @@
 "use strict";
 
 var fs      = require("fs"),
+    path    = require("path"),
     swagger = require("swagger-node-express");
 
 exports.updateUserInfo = {
@@ -22,7 +23,7 @@ exports.updateUserInfo = {
 };
 
 exports.init = function (swagger, done) {
-    fs.readFile("../models/user.json", { encoding: "utf8" }, function (err, data) {
+    fs.readFile(path.join(__dirname, "../models/user.json"), { encoding: "utf8" }, function (err, data) {
         if (err) {
             return done(err);
         }
