@@ -8,7 +8,7 @@ schema.title = "My Account";
 delete schema.description;
 
 exports.getAccount = function (req, res) {
-    var isAdmin = req.user && req.user.roles && req.user.roles.indexOf("administrators") != -1;
+    var isAdmin = req.user && req.user.roles && req.user.roles.indexOf("administrators") !== -1;
 
     function replacer(key, value) {
         switch (key) {

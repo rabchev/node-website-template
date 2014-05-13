@@ -1,3 +1,6 @@
+/*jshint expr: true */
+/*global it, describe, before */
+
 "use strict";
 
 var request         = require("supertest"),
@@ -45,7 +48,6 @@ describe("public site", function () {
                 .expect(200);
         }, function (data) {
             expect(data).to.be.ok;
-
         });
     });
 });

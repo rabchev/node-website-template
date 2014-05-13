@@ -8,6 +8,7 @@
         "angular-route": "*",
         "swagger-ui": "*",
         "bootstrap": "*",
-        "json-editor": "*"
+        "json-editor": "*",
+        "superagent": "*"
     }
 }

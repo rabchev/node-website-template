@@ -4,8 +4,50 @@ var swagger     = require("swagger-node-express"),
     express     = require("express"),
     async       = require("async"),
     path        = require("path"),
+    util        = require("util"),
     fs          = require("fs"),
+    _           = require("lodash"),
     api         = express();
+
+var Strings = {
+    "NO_HTTP_METHOD": "The method \"%s\" of controller \"%s\" does not specify HTTP method.",
+    "INVALID_HTTP_METHOD": "The method \"%s\" of controller \"%s\" specifies invalid HTTP method."
+};
+
+function addMethods(controller, name, done) {
+    var err;
+    _.forOwn(controller, function (val, key) {
+        if (val.spec) {
+            switch (val.spec.method) {
+            case "GET":
+                swagger.addGet(val);
+                break;
+            case "POST":
+                swagger.addPost(val);
+                break;
+            case "PUT":
+                swagger.addPut(val);
+                break;
+            case "PATCH":
+                swagger.addPatch(val);
+                break;
+            case "DELETE":
+                swagger.addDelete(val);
+                break;
+            default:
+                var msg;
+                if (val.spec.method) {
+                    msg = util.format(Strings.INVALID_HTTP_METHOD, key, name);
+                } else {
+                    msg = util.format(Strings.NO_HTTP_METHOD, key, name);
+                }
+                err = new Error(msg);
+                return false;
+            }
+        }
+    });
+    done(err);
+}
 
 exports.init = function (app, callback) {
     app.use("/api", api);
@@ -20,12 +62,24 @@ exports.init = function (app, callback) {
 
     fs.readdir(path.join(__dirname, "rest-api"), function (err, files) {
         async.each(files, function (file, done) {
+            var controller;
             try {
-                require("./rest-api/" + file).init(swagger);
+                controller = require("./rest-api/" + file);
+                if (controller.init) {
+                    if (controller.init.length === 2) {
+                        return controller.init(swagger, function (err) {
+                            if (err) {
+                                return done(err);
+                            }
+                            addMethods(controller, file, done);
+                        });
+                    }
+                    controller.init(swagger);
+                }
             } catch (err) {
                 return done(err);
             }
-            done();
+            addMethods(controller, file, done);
         }, function (err) {
             var uiPath = path.join(__dirname, "..", "client", "bower_components", "swagger-ui", "dist");
             swagger.configure(app.get("swaggerUrl") + "/api", "0.1");

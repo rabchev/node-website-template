@@ -32,7 +32,7 @@ exports.init = function (swagger) {
                 nickname: "getSample"
             },
             action: function (req, resp) {
-                    resp.json({ name: req.params.key });
+                resp.json({ name: req.params.key });
             }
         }
     };

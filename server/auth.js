@@ -1,3 +1,5 @@
+"use strict";
+
 var passport            = require("passport"),
     LocalStrategy       = require("passport-local").Strategy,
     ensureLogin         = require("connect-ensure-login"),
@@ -35,7 +37,7 @@ passport.use(new LocalStrategy(
                 });
             }
 
-            if (user.password != password) {
+            if (user.password !== password) {
                 return done(null, false, {
                     message: "Invalid password"
                 });
