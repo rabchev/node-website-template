@@ -15,29 +15,22 @@ var dtos = {
         }
     }
 };
+swagger.addModels(dtos);
 
-exports.init = function (swagger) {
-    var methods = {
-        getSample: {
-            spec: {
-                description: "Sample Operations",
-                path: "/sample/{key}",
-                parameters : [
-                    swagger.pathParam("key", "The ID of the sample item to get.", "string")
-                ],
-                notes: "Implementation notes on get sample item method.",
-                summary: "Gets a sample item.",
-                method: "GET",
-                type: "Sample",
-                nickname: "getSample"
-            },
-            action: function (req, resp) {
-                resp.json({ name: req.params.key });
-            }
-        }
-    };
-
-    swagger.addModels(dtos);
-
-    swagger.addGet(methods.getSample);
+exports.getSample = {
+    spec: {
+        description: "Sample Operations",
+        path: "/sample/{key}",
+        parameters : [
+            swagger.pathParam("key", "The ID of the sample item to get.", "string")
+        ],
+        notes: "Implementation notes on get sample item method.",
+        summary: "Gets a sample item.",
+        method: "GET",
+        type: "Sample",
+        nickname: "getSample"
+    },
+    action: function (req, resp) {
+        resp.json({ name: req.params.key });
+    }
 };

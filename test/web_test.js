@@ -1,6 +1,3 @@
-/*jshint expr: true */
-/*global it, describe, before */
-
 "use strict";
 
 var request         = require("supertest"),

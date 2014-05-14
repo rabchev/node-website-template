@@ -1,3 +1,5 @@
+/*jshint -W106 */
+
 "use strict";
 
 var http            = require("http"),

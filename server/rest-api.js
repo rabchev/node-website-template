@@ -59,27 +59,28 @@ exports.init = function (app, callback) {
         res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");
         res.header("Content-Type", "application/json; charset=utf-8");
     };
-
+    global.swagger = swagger;
     fs.readdir(path.join(__dirname, "rest-api"), function (err, files) {
         async.each(files, function (file, done) {
             var controller;
+            if (path.extname(file) !== ".js") {
+                return done();
+            }
             try {
                 controller = require("./rest-api/" + file);
                 if (controller.init) {
-                    if (controller.init.length === 2) {
-                        return controller.init(swagger, function (err) {
-                            if (err) {
-                                return done(err);
-                            }
-                            addMethods(controller, file, done);
-                        });
-                    }
-                    controller.init(swagger);
+                    controller.init(function (err) {
+                        if (err) {
+                            return done(err);
+                        }
+                        addMethods(controller, file, done);
+                    });
+                } else {
+                    addMethods(controller, file, done);
                 }
             } catch (err) {
                 return done(err);
             }
-            addMethods(controller, file, done);
         }, function (err) {
             var uiPath = path.join(__dirname, "..", "client", "bower_components", "swagger-ui", "dist");
             swagger.configure(app.get("swaggerUrl") + "/api", "0.1");
