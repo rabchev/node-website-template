@@ -13,6 +13,7 @@
     },
     "dependencies": {
         "express": "*",
+        "node-uuid": "*",
         "body-parser": "*",
         "cookie-parser": "*",
         "method-override": "*",
@@ -26,6 +27,7 @@
         "nconf": "*",
         "passport": "*",
         "passport-local": "*",
+        "passport-remember-me": "*",
         "passport-facebook": "*",
         "connect-ensure-login": "*",
         "express-session": "",

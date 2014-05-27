@@ -1,14 +1,12 @@
 "use strict";
 
-var _ = require("lodash"),
-    schema = require("../models/user.json"),
+var schema = require("../models/user.json"),
     scripts;
 
 schema.title = "My Account";
 delete schema.description;
 
 exports.getAccount = function (req, res) {
-    var isAdmin = req.user && req.user.roles && req.user.roles.indexOf("administrators") !== -1;
 
     function replacer(key, value) {
         switch (key) {
