@@ -1,9 +1,21 @@
+/*jshint -W106 */
+
 "use strict";
 
 var passport            = require("passport"),
     LocalStrategy       = require("passport-local").Strategy,
+    RememberMeStrategy  = require("passport-remember-me").Strategy,
     ensureLogin         = require("connect-ensure-login"),
-    users               = require("./data/users");
+    tokens              = require("./data/auth-tokens"),
+    users               = require("./data/users"),
+    opts                = {
+        key: "remember_me",
+        cookie: {
+            path: "/",
+            httpOnly: true,
+            maxAge: 604800000
+        }
+    };
 
 // Passport session setup.
 //   To support persistent login sessions, Passport needs to be able to
@@ -48,11 +60,47 @@ passport.use(new LocalStrategy(
     }
 ));
 
-exports.init = function (app, callback) {
-    app
-        .use(passport.initialize())
-        .use(passport.session())
-        .set("authHandler", ensureLogin.ensureAuthenticated("/sign-in"));
+passport.use(new RememberMeStrategy(
+    opts,
+    function(token, done) {
+        tokens.getValue(token, function(err, userId) {
+            if (err) {
+                return done(err);
+            }
 
+            if (!userId) {
+                return done(null, false);
+            }
+
+            users.findById(userId, function(err, user) {
+                if (err) { return done(err); }
+                if (!user) { return done(null, false); }
+                return done(null, user);
+            });
+        });
+    },
+    tokens.issueToken
+));
+
+exports.init = function (app, callback) {
+    if (!app.settings.authHandler) {
+        app
+            .use(passport.initialize())
+            .use(passport.session())
+            .use(passport.authenticate("remember-me"))
+            .set("authHandler", ensureLogin.ensureAuthenticated("/sign-in"));
+    }
     callback();
+};
+
+exports.cookieSetter = function(req, res, next) {
+    if (!req.body[opts.key]) {
+        return next();
+    }
+
+    tokens.issueToken(req.user, function(err, token) {
+        if (err) { return next(err); }
+        res.cookie(opts.key, token, opts.cookie);
+        return next();
+    });
 };

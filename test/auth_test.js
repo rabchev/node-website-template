@@ -1,8 +1,8 @@
 "use strict";
 
-var chai            = require("chai"),
+var //chai            = require("chai"),
     server          = require("../server"),
-    expect          = chai.expect,
+    //expect          = chai.expect,
     test;
 
 describe("public site", function () {
@@ -18,15 +18,13 @@ describe("public site", function () {
         });
     });
 
-    it("get index", function (done) {
+    it("get account anonymous", function (done) {
         test(done, function (req) {
             return req
-                .get("/")
-                .set("Accept", "text/html")
-                .expect("Content-Type", /html/)
-                .expect(200);
-        }, function (data) {
-            expect(data).to.be.ok;
+            .get("/account")
+            .set("Accept", "text/html")
+            .expect(302)
+            .expect("Location", "/sign-in");
         });
     });
 });

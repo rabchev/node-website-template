@@ -1,3 +1,7 @@
+/*jshint -W106 */
+
+"use strict";
+
 module.exports = function (grunt) {
     grunt.initConfig({
         jsdoc: {
@@ -21,13 +25,17 @@ module.exports = function (grunt) {
             options: {
                 timeout: 3000,
                 ignoreLeaks: false,
+                globals: ["swagger"],
                 reporter: "spec"
             },
             all: {
                 src: ["./test/*_test.js"]
             },
-            public: {
-                src: ["./test/public_test.js"]
+            web: {
+                src: ["./test/web_test.js"]
+            },
+            auth: {
+                src: ["./test/auth_test.js"]
             }
         },
         shell: {
