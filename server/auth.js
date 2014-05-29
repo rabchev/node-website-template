@@ -5,6 +5,7 @@
 var passport            = require("passport"),
     LocalStrategy       = require("passport-local").Strategy,
     RememberMeStrategy  = require("passport-remember-me").Strategy,
+    FacebookStrategy    = require("passport-facebook").Strategy,
     ensureLogin         = require("connect-ensure-login"),
     tokens              = require("./data/auth-tokens"),
     users               = require("./data/users"),
@@ -15,7 +16,10 @@ var passport            = require("passport"),
             httpOnly: true,
             maxAge: 604800000
         }
-    };
+    },
+    FACEBOOK_APP_ID     = "465623040250444",
+    FACEBOOK_APP_SECRET = "2e65ae79ebd5cdb683d3310752aeab58",
+    CALLBACK_URL        = "http://localhost:8095/sign-in/facebook/callback";
 
 // Passport session setup.
 //   To support persistent login sessions, Passport needs to be able to
@@ -44,15 +48,11 @@ passport.use(new LocalStrategy(
             }
 
             if (!user) {
-                return done(null, false, {
-                    message: "Unknown user " + username
-                });
+                return done(null, false, { message: "Unknown user " + username });
             }
 
             if (user.password !== password) {
-                return done(null, false, {
-                    message: "Invalid password"
-                });
+                return done(null, false, { message: "Invalid password" });
             }
 
             return done(null, user);
@@ -73,13 +73,36 @@ passport.use(new RememberMeStrategy(
             }
 
             users.findById(userId, function(err, user) {
-                if (err) { return done(err); }
-                if (!user) { return done(null, false); }
+                if (err) {
+                    return done(err);
+                }
+                if (!user) {
+                    return done(null, false);
+                }
                 return done(null, user);
             });
         });
     },
     tokens.issueToken
+));
+
+passport.use(new FacebookStrategy(
+    {
+        clientID: FACEBOOK_APP_ID,
+        clientSecret: FACEBOOK_APP_SECRET,
+        callbackURL: CALLBACK_URL
+    },
+    function(accessToken, refreshToken, profile, done) {
+        users.findByUsername(profile.name, function (err, user) {
+            if (err) {
+                return done(err);
+            }
+            if (!user) {
+                return done(null, false);
+            }
+            done(null, user);
+        });
+    }
 ));
 
 exports.init = function (app, callback) {

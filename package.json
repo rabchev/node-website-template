@@ -38,6 +38,7 @@
         "chai": "*",
         "sinon-chai": "*",
         "supertest": "*",
+        "jsdom": "*",
         "grunt": "*",
         "grunt-release": "*",
         "grunt-shell": "*",

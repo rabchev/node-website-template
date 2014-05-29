@@ -4,8 +4,10 @@ var authOpts = {
         failureRedirect: "/sign-in",
         failureFlash: true
     },
-    authenticate    = require("passport").authenticate("local", authOpts),
-    cookieSetter    = require("../auth").cookieSetter;
+    passport            = require("passport"),
+    local               = passport.authenticate("local", authOpts),
+    facebookCallback    = passport.authenticate("facebook", authOpts),
+    cookieSetter        = require("../auth").cookieSetter;
 
 exports.getSignIn = function (req, res) {
     var scope = {
@@ -16,7 +18,7 @@ exports.getSignIn = function (req, res) {
     res.render("sign-in", scope);
 };
 
-exports.postSignIn = function (req, res) {
+exports.redirect = function (req, res) {
     var url = "/";
     if (req.session && req.session.returnTo) {
         url = req.session.returnTo;
@@ -33,6 +35,8 @@ exports.getSignOut = function (req, res){
 
 exports.init = function (app) {
     app.get("/sign-in", exports.getSignIn);
-    app.post("/sign-in", authenticate, cookieSetter, exports.postSignIn);
+    app.post("/sign-in", local, cookieSetter, exports.redirect);
     app.get("/sign-out", exports.getSignOut);
+    app.get("/sign-in/facebook", passport.authenticate("facebook"));
+    app.get("/sign-in/facebook/callback", facebookCallback, exports.redirect);
 };

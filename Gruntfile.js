@@ -57,7 +57,8 @@ module.exports = function (grunt) {
                 logConcurrentOutput: true
             },
             debug_all: ["node-inspector", "shell:debug:all"],
-            debug_router: ["node-inspector", "shell:debug:public"]
+            debug_web: ["node-inspector", "shell:debug:web"],
+            debug_auth: ["node-inspector", "shell:debug:auth"]
         },
         "node-inspector": {
             "default": {}
