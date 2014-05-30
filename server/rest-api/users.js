@@ -22,7 +22,7 @@ exports.updateUserInfo = {
 };
 
 exports.init = function (done) {
-    fs.readFile(path.join(__dirname, "../models/user.json"), { encoding: "utf8" }, function (err, data) {
+    fs.readFile(path.join(__dirname, "../models/schema/user.json"), { encoding: "utf8" }, function (err, data) {
         if (err) {
             return done(err);
         }

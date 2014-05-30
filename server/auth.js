@@ -7,8 +7,8 @@ var passport            = require("passport"),
     RememberMeStrategy  = require("passport-remember-me").Strategy,
     FacebookStrategy    = require("passport-facebook").Strategy,
     ensureLogin         = require("connect-ensure-login"),
-    tokens              = require("./data/auth-tokens"),
-    users               = require("./data/users"),
+    tokens              = require("./models/auth-tokens"),
+    users               = require("./models/users"),
     opts                = {
         key: "remember_me",
         cookie: {
@@ -90,15 +90,25 @@ passport.use(new FacebookStrategy(
     {
         clientID: FACEBOOK_APP_ID,
         clientSecret: FACEBOOK_APP_SECRET,
-        callbackURL: CALLBACK_URL
+        callbackURL: CALLBACK_URL,
+        state: true
     },
     function(accessToken, refreshToken, profile, done) {
-        users.findByUsername(profile.name, function (err, user) {
+        users.findByIdentityProvider("facebook", profile.id, function (err, user) {
             if (err) {
                 return done(err);
             }
             if (!user) {
-                return done(null, false);
+                user = {
+                    name: profile.displayName,
+                    username: profile.username,
+                    identityProviders: [{ name: profile.provider, id: profile.id }],
+                    roles: ["guests"]
+                };
+                if (profile.emails && profile.emails.length) {
+                    user.email = profile.emails[0].value;
+                }
+                users.insert(user);
             }
             done(null, user);
         });

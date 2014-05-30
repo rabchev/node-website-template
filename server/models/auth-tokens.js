@@ -25,7 +25,7 @@ function consumeRememberMeToken(token, fn) {
 }
 
 function issueToken(userId, done) {
-    var token = uuid.v1();
+    var token = uuid.v4();
 
     tokens[token] = {
         _id: token,

@@ -37,6 +37,6 @@ exports.init = function (app) {
     app.get("/sign-in", exports.getSignIn);
     app.post("/sign-in", local, cookieSetter, exports.redirect);
     app.get("/sign-out", exports.getSignOut);
-    app.get("/sign-in/facebook", passport.authenticate("facebook"));
+    app.get("/sign-in/facebook", passport.authenticate("facebook", { scope: ["email"] }));
     app.get("/sign-in/facebook/callback", facebookCallback, exports.redirect);
 };

@@ -1,6 +1,6 @@
 "use strict";
 
-var schema = require("../models/user.json"),
+var schema = require("../models/schema/user.json"),
     scripts;
 
 schema.title = "My Account";
@@ -13,6 +13,7 @@ exports.getAccount = function (req, res) {
         case "_id":
         case "password":
         case "roles":
+        case "identityProviders":
             return undefined;
         }
 

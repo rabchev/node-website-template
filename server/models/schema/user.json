@@ -12,18 +12,10 @@
             "title": "Full Name",
             "type": "string"
         },
-        "nickname": {
-            "title": "Nickname",
-            "type": "string"
-        },
         "email": {
             "title": "Email Address",
             "type": "string",
             "format": "email"
-        },
-        "phone": {
-            "title": "Phone Number",
-            "type": "string"
         },
         "password": {
             "title": "Password",
@@ -33,6 +25,20 @@
             "type": "array",
             "items": {
                 "type": "string"
+            }
+        },
+        "identityProviders": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "id": {
+                        "type": "string"
+                    }
+                }
             }
         }
     },
