@@ -1,7 +1,7 @@
 {
     "name": "website-template",
     "description": "Bare-bones NodeJS MVC website with Express, Swagger, Angular, RequireJS, Handlebars, Mocha.",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "main": "index",
     "author": "Boyan Rabchev <boyan@rabchev.com>",
     "contributors": [
