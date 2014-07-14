@@ -12,6 +12,7 @@ var http            = require("http"),
     favicon         = require("static-favicon"),
     flash           = require("connect-flash")(),
     exphbs          = require("express3-handlebars"),
+    swaggy          = require("swaggy"),
     path            = require("path"),
     url             = require("url"),
     fs              = require("fs"),
@@ -19,7 +20,6 @@ var http            = require("http"),
     auth            = require("./auth"),
     pckg            = require("../package.json"),
     controllers     = require("./controllers"),
-    rest_api        = require("./rest-api"),
     ignorePaths     = new RegExp("^/public/|/content/|/client/", "i"),
     resourcesRoot   = "/res/" + pckg.version,
     servers         = [],
@@ -113,18 +113,22 @@ function init(opts, callback) {
 
 // FIXME: Change the key below with randomly generated number. You could use (http://randomkeygen.com).
                 secretKey = "95DA438DE3A81";
-                session = require("express-session")({ secret: secretKey });
+                session = require("express-session")({
+                    secret: secretKey,
+                    saveUninitialized: true,
+                    resave: true
+                });
 
                 done();
             },
             function (done) {
-                app.set("swaggerUrl", url.format(opts.instances[opts.swaggerInst || 0]))
-                    .set("resources", resourcesRoot)
+                app.set("resources", resourcesRoot)
                     .set("views", path.resolve("server", "views"))
                     .engine("html", hbs.engine)
                     .set("view engine", "html")
                     .use(favicon())
-                    .use(bodyParser())
+                    .use(bodyParser.urlencoded({ extended: true }))
+                    .use(bodyParser.json())
                     .use(methodOverride())
                     .use(cookieParser(secretKey))
                     .use(sessionHandler)
@@ -140,7 +144,10 @@ function init(opts, callback) {
                 auth.init(app, done);
             },
             function (done) {
-                rest_api.init(app, done);
+                var conf = {
+                    controllersDir: path.join(__dirname, "rest-api")
+                };
+                swaggy(app, conf, done);
             },
             function (done) {
                 controllers.init(app, done);

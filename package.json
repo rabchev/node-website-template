@@ -19,7 +19,7 @@
         "method-override": "*",
         "serve-static": "*",
         "static-favicon": "*",
-        "swagger-node-express": "*",
+        "swaggy": "*",
         "async": "*",
         "lodash": "*",
         "express3-handlebars": "*",

@@ -1,7 +1,7 @@
 "use strict";
 
 // Data Transfer Objects
-var dtos = {
+exports.models = {
     Sample: {
         id: "Sample",
         title: "Sample",
@@ -15,14 +15,13 @@ var dtos = {
         }
     }
 };
-swagger.addModels(dtos);
 
 exports.getSample = {
     spec: {
         description: "Sample Operations",
         path: "/sample/{key}",
         parameters : [
-            swagger.pathParam("key", "The ID of the sample item to get.", "string")
+            Swagger.pathParam("key", "The ID of the sample item to get.", "string")
         ],
         notes: "Implementation notes on get sample item method.",
         summary: "Gets a sample item.",

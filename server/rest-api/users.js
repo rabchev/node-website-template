@@ -8,7 +8,7 @@ exports.updateUserInfo = {
         description: "Sample Operations",
         path: "/users/{id}",
         parameters : [
-            swagger.pathParam("id", "The user ID to update.", "string")
+            Swagger.pathParam("id", "The user ID to update.", "string")
         ],
         notes: "Implementation notes on get sample item method.",
         summary: "Updates user information.",
@@ -21,7 +21,7 @@ exports.updateUserInfo = {
     }
 };
 
-exports.init = function (done) {
+exports.init = function (swagger, opts, done) {
     fs.readFile(path.join(__dirname, "../models/schema/user.json"), { encoding: "utf8" }, function (err, data) {
         if (err) {
             return done(err);
