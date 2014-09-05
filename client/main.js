@@ -1,8 +1,8 @@
 require.config({
     paths: {
-        angular: appConfig.resources + "/bower_components/angular/angular.min",
-        angularRoute: appConfig.resources + "/bower_components/angular-route/angular-route.min",
-        text: appConfig.resources + "/bower_components/requirejs-text/text"
+        angular: "bower_components/angular/angular.min",
+        angularRoute: "bower_components/angular-route/angular-route.min",
+        text: "bower_components/requirejs-text/text"
     },
     shim: {
         "angular" : {"exports" : "angular"},
