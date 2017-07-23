@@ -12,7 +12,7 @@ nconf.argv({
     },
     h: {
         alias: "app.hostname",
-        describe: "The IP address or domain name of the hosting machine. Defaults to \"localhsot\".",
+        describe: "The IP address or domain name of the hosting machine. Defaults to \"localhost\".",
         demand: false
     },
     t: {
