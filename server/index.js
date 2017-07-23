@@ -102,7 +102,7 @@ function init(opts, callback) {
     if (!opts) {
         opts = require("./config");
     } else if (typeof opts === "number") {
-        opts = { instances: [{ port: opts, hostname: "localhsot", protocol: "http" }] };
+        opts = { instances: [{ port: opts, hostname: "localhost", protocol: "http" }] };
     }
 
     var app = express();
